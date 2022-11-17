@@ -551,14 +551,14 @@ function atbChargers()
 // };
 
 
-async function battleProcessing()
+function battleProcessing()
     {
         hideOptionsP1();
         hideOptionsP2();
     // player coin toss
         if (coinTossed == false) 
         {
-            await coinToss();
+            coinToss();
             battleProcessing();
 
             if (p1T == true && p2T == true) 
@@ -618,13 +618,15 @@ async function battleProcessing()
           }
     }
 
-    battleProcessing2()
+    function battleProcessing2()
     {
       // test stuff here
       // hide shit
       // cointoss check
       // hp check
       // ues a switch statement
+      var here = 0;
+      
     }
 
 //battleProcessing();
