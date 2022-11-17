@@ -96,6 +96,9 @@ Atb bar aesthetics.
 
 Refactor in Next.js and TypeScript
 
+Resources Used - 
+https://github.com/glnewton/Green-Things-vs-Dead-Things/blob/main/README.md
+
 Acknowledgements-
 1. Inspired by System Shock II, MegaMan games and RPG Maker XP.
 2. Images in the background are not owned by me but are heavily
