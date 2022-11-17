@@ -40,25 +40,55 @@ html
     translate: 1300px -230px;
 }
 
+#posI
+{
+    color:rgb(255, 212, 208);
+    position:fixed;
+    flex:auto;
+    translate: 1160px 490px;
+}
+
 #posDia
 {
-    flex: content;
-    position: relative;
-    translate: 820px 470px;
+    flex:auto;
+    position: absolute;
+    translate: 1135px 470px;
+}
+
+#dials
+{
+    font-size: 24px;
+}
+
+#negI
+{
+    color:rgb(198, 232, 255);
+    flex:auto;
+    position: fixed;
+    translate: 335px 490px;
 }
 
 #negDia
 {
-    flex: content;
-    position: relative;
-    translate: 290px 470px;
+    flex:auto;
+    position: absolute;
+    translate: 310px 470px;
+    align-items: inherit;
+}
+
+#medI
+{
+    color:rgb(255, 255, 255);
+    position: fixed;
+    flex:auto;
+    translate: 750px 490px;
 }
 
 #medDia
 {
-    flex: content;
-    position:fixed;
-    translate: 460px 470px;
+    flex: auto;
+    position: absolute;
+    translate: 725px 470px;
 }
 
 #table
@@ -151,7 +181,7 @@ body
     flex: content;
     position: fixed;
     border: 0px;
-    translate: 680px 150px;
+    translate: 680px 350px;
     justify-content: center;
     align-items: stretch;
     text-align: left;

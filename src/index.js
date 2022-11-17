@@ -108,7 +108,7 @@ function dLog(yu = false)
   }
 }
 
-hide_dials();
+display_dials();
 // normal output
 //outputColor('white');
 // dmg 
@@ -139,22 +139,22 @@ P2 = [randT(hpmax, hpmin),randT(atmax, atmin),randT(accmax, accmin),randT(dfmax,
 
 function displayP1Stats()
 {
-  p1S.innerHTML = `<div id="np1Hp">HP: ${P1[1]}</div>
+  p1S.innerHTML = `<div id="np1Hp">HP: ${P1[0]}</div>
         <div id="np1Eth">Ether: ${P1[6]}</div>
         <div id="np1Def">Def: ${P1[3]}</div>
         <div id="np1Acc">Acc:${P1[2]} </div>
-        <div id="np1Atk">Atk:${P1[0]} </div>
+        <div id="np1Atk">Atk:${P1[1]} </div>
         <div> Psy:${P1[4]} </div>
         <div id="np1Sta">Sta:${P1[5]} </div>`;
 }
 
 function displayP2Stats()
 {
-  p2S.innerHTML = `<div id="np2Hp">HP: ${P2[1]} </div>
+  p2S.innerHTML = `<div id="np2Hp">HP: ${P2[0]} </div>
         <div id="np2Eth">Ether: ${P2[6]} </div>
         <div id="np2Def">Def: ${P2[3]} </div>
         <div id="np2Acc">Acc: ${P2[2]} </div>
-        <div id="np2Atk">Atk: ${P2[0]} </div>
+        <div id="np2Atk">Atk: ${P2[1]} </div>
         <div> Psy:${P2[4]} </div>
         <div id="np2Sta">Sta: ${P2[5]} </div>`;
 }
@@ -318,13 +318,12 @@ function chargeEther(max)
       posi.style.display = 'block';
       negi.style.display = 'block';
       addm.style.display = 'block';
+      document.getElementById('dials').style.display = 'block';
     }
 
     function hide_dials()
     {
-      posi.style.display = 'none';
-      negi.style.display = 'none';
-      addm.style.display = 'none';
+      document.getElementById('dials').style.display = 'none';
     }
           
     function actionBase(PT, T)
@@ -532,6 +531,29 @@ function atbChargers()
     }
   }
 
+  function hpCheck()
+  {
+    if(gameOver == true)
+    { 
+      hideOptionsP1();
+      hideOptionsP2();
+    }
+    else if(P1[0] <= 0 && P2[0] > 0)
+    {
+        // call winner 
+        winnerChosen = true;
+    }
+    else if(P2[0] <= 0 && P1[0] > 0)
+    {
+        //call winner
+        winnerChosen = true;
+    }
+    else
+    {
+      log(`P1 Hp is --> ${P1[0]}`);
+      log(`P2 Hp is --> ${P2[0]}`);
+    }
+  }
 
 // drawActorAtb = function(actor, x, y, width) {
 //   width = width || 186;
@@ -579,21 +601,7 @@ function battleProcessing()
             }
         }
 
-          if(gameOver == true)
-          { 
-            hideOptionsP1();
-            hideOptionsP2();
-          }
-          else if(P1[0] <= 0 && P2[0] > 0)
-          {
-              // call winner 
-              winnerChosen = true;
-          }
-          else if(P2[0] <= 0 && P1[0] > 0)
-          {
-              //call winner
-              winnerChosen = true;
-          }
+          
           if (p1T == true)
           {
             clearLog();
@@ -618,16 +626,23 @@ function battleProcessing()
           }
     }
 
-    function battleProcessing2()
-    {
-      // test stuff here
-      dLog(false);
-      // hide shit
-      // cointoss check
-      // hp check
-      // ues a switch statement
-      var here = 0;
-      log('dfef');
-    }
+async function battleProcessing2()
+{
+  // test stuff here
+  dLog(false);
+  // hide shit
+  hideOptionsP1();
+  hideOptionsP2();
+  //displayP1Stats(); // auto
+  //displayP2Stats(); // updates
+  hide_dials(); // works
+  //display_dials(); // both work
+  // cointoss check
+  await coinToss();
+  // hp check
+  hpCheck();
+  // ues a switch statement
+  var here = 0;
+}
 
-//battleProcessing2();
+battleProcessing2();
