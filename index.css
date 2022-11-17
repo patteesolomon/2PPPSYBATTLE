@@ -151,7 +151,7 @@ body
     flex: content;
     position: fixed;
     border: 0px;
-    translate: 680px 350px;
+    translate: 680px 150px;
     justify-content: center;
     align-items: stretch;
     text-align: left;

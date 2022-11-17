@@ -621,12 +621,13 @@ function battleProcessing()
     function battleProcessing2()
     {
       // test stuff here
+      dLog(false);
       // hide shit
       // cointoss check
       // hp check
       // ues a switch statement
       var here = 0;
-      
+      log('dfef');
     }
 
-//battleProcessing();
+//battleProcessing2();
