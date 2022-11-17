@@ -1,0 +1,166 @@
+
+html
+{
+    font-family: fantasy, monospace, 
+    'Segoe UI', Tahoma, Geneva, 
+    Verdana, sans-serif;
+    color: rgb(255, 248, 205);
+    margin: 0;
+    height: 1080px;
+    width: 1920px;
+    zoom: 100%;
+    position: fixed;
+}
+
+#P2Stats
+{
+    translate: 1300px -230px;
+}
+
+#etc2{
+    flex: auto;
+    translate: 1300px -230px;
+}
+
+#n1{
+    flex: content;
+    position: relative;
+}
+
+#n2{
+    flex: content;
+    position: relative;
+}
+
+#d2ev{
+    translate: 1300px -230px;
+}
+
+#u{
+    translate: 1300px -230px;
+}
+
+#posDia
+{
+    flex: content;
+    position: relative;
+    translate: 820px 470px;
+}
+
+#negDia
+{
+    flex: content;
+    position: relative;
+    translate: 290px 470px;
+}
+
+#medDia
+{
+    flex: content;
+    position:fixed;
+    translate: 460px 470px;
+}
+
+#table
+{
+    /* player 2 */
+    flex: content;
+    position: relative;
+    translate: 830px 400px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+#manuel
+{
+    /* player 1 */
+    position: relative;
+    translate: 540px 400px;
+}
+
+#canvas
+{
+    position: fixed;
+    border: 1px solid rgba(206, 255, 218, 0.044);
+    flex:auto;
+    translate: 550px 0px;
+    zoom: 50%;
+    background-repeat: no-repeat;
+    image-rendering: auto;
+    border-style: dashed;
+    box-shadow: 5px 5px 1px 1px lightgreen ;
+    box-shadow: 1px 1px 10px 10px lightgreen ;
+    box-sizing: border-box;
+}
+
+body
+{
+    border: 0;
+    background-color: black;
+}
+
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+#p1c
+{
+    translate: 430px 480px;
+}
+
+#p2c
+{
+    translate: 880px 460px;
+}
+
+#z
+{
+    display: flexbox;
+}
+
+#x
+{
+    display: flexbox;
+}
+
+#c
+{
+    display: flexbox;
+}
+
+#i
+{
+    display: flexbox;
+}
+
+#o
+{
+    display: flexbox;
+}
+
+#p
+{
+    display: flexbox;
+}
+
+#logBox
+{
+    display: flexbox;
+    flex: content;
+    position: fixed;
+    border: 0px;
+    translate: 680px 350px;
+    justify-content: center;
+    align-items: stretch;
+    text-align: left;
+    border-bottom: 4px;
+    border-top: 4px;
+    border-left: 4px;
+    box-shadow: 5px 5px 1px 1px lightgreen;
+    box-shadow: 4px 4px -10px -10px lightgreen;
+    background-color: rgba(127, 255, 212, 0.281);
+    height: fit-content;
+    color: rgb(161, 216, 255);
+}
