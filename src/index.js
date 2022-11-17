@@ -580,50 +580,11 @@ function battleProcessing()
     // player coin toss
         if (coinTossed == false) 
         {
-            coinToss();
-            battleProcessing();
-
-            if (p1T == true && p2T == true) 
-            {
-                log('retoss!');
-                coinTossed = false;
-                p1T = null;
-                p2T = null;
-                battleProcessing();
-            }
-            else if (p1T == false && p2T == false)
-            {
-                log('retoss!');
-                coinTossed = false;
-                p1T = null;
-                p2T = null;
-                battleProcessing();
-            }
+            
         }
 
           
-          if (p1T == true)
-          {
-            clearLog();
-            log('Player1 turn...');
-            log('Attack / Psi / Defend');
-            showOptionsP1();
-            //displayP1Stats();
-            actionBase(P1, P2);
-            clearAtb(P1);
-              p1T = false;
-          }
-          else if (p2T == true)
-          {
-            clearLog();
-            log('Player2 turn...');
-            log('Attack / Psi / Defend');
-            showOptionsP2();
-            //displayP2Stats();
-            actionBase2(P2, P1);
-            clearAtb(P2);
-              p2T = false;
-          }
+          
     }
 
 async function battleProcessing2()
@@ -638,10 +599,73 @@ async function battleProcessing2()
   hide_dials(); // works
   //display_dials(); // both work
   // cointoss check
-  await coinToss();
-  // hp check
-  hpCheck();
-  // ues a switch statement
+  if(coinTossed == false){
+    do
+    {await coinToss();
+   // segment 1 
+    if (p1T == true && p2T == true) 
+    {
+        log('retoss!');
+        coinTossed = false;
+        p1T = null;
+        p2T = null;
+        coinToss();
+    }
+    else if (p1T == false && p2T == false)
+    {
+        log('retoss!');
+        coinTossed = false;
+        p1T = null;
+        p2T = null;
+        coinToss();
+    }} while(p1T == false && p2T == false || p1T == true && p2T == true); // clean and lean!
+  }
+  else{
+    // hp check
+    hpCheck();
+  }
+  
+
+  setTimeout(() => {
+      // ues a switch statement
+  switch(coinTossed)
+  {
+    case true:
+    {
+      if (p1T == true)
+      {
+        clearLog();
+        log('Player1 turn...');
+        log('Attack / Psi / Defend');
+        showOptionsP1();
+        //displayP1Stats();
+        actionBase(P1, P2);
+        clearAtb(P1);
+          p1T = false;
+      }
+      else if (p2T == true)
+      {
+        clearLog();
+        log('Player2 turn...');
+        log('Attack / Psi / Defend');
+        showOptionsP2();
+        //displayP2Stats();
+        actionBase2(P2, P1);
+        clearAtb(P2);
+          p2T = false;
+      }
+    }
+    default:
+    {
+      // main loop
+    }
+  }
+  }, 1000);
+
+  // segement 2
+  setTimeout(() =>{
+    log('to the moon!');
+  }, 2000);
   var here = 0;
 }
 
