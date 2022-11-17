@@ -580,7 +580,7 @@ function battleProcessing()
     // player coin toss
         if (coinTossed == false) 
         {
-            
+            //ds
         }
 
           
