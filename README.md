@@ -1,6 +1,8 @@
+About-
+
 2 Player Psychic Battle
 
-Introduction -
+live site game link- https://patteesolomon.github.io/2PPSYBATTLE/
 
 Player Psychic Battle is a battle system that
 integrates together the elements of ATB and new elements
@@ -35,3 +37,73 @@ a median point that pushes the ball toward the center for greater balance and a 
     Ether: An energy-like matter that is shaped by what many believe to be a type of fictitious energy that only exists as an exotic waveform that can emulate different aspects of reality and even instigate it. All within the realm of fiction, of course. As of the time this is being written, this type of exotic energy is not real in any sense of the current state of scientific development. There is no real evidence of this type of energy. This aspect is merely here for the purpose of creating a consumption aspect for the player so that the game doesn't overextend what is only given. which is little and needs to be cultivated through other areas of combat. Ether is obtained from physical and non-psionic gunfire combat and is needed for all psionic abilities acquired within this simulation.
 
 This concludes this explanation of what these mechanics are within the ATB or any potential turn-based battle system, as these mechanics would need to be greatly re-engineered to a more comparable degree in any other game system that implements a combat mode or mechanic.
+
+ScreenShots -
+
+![image](https://user-images.githubusercontent.com/113143898/202555075-a04fa0ff-77fb-437b-9880-b644889c423a.png)
+
+![image](https://user-images.githubusercontent.com/113143898/202555580-15debc1c-ea1f-4d2e-bc73-2a6b7b6c189d.png)
+
+Build Status - 
+
+This is a project hosted on GitHub Pages directly housed from this repository.
+
+Code Style -
+Mostly functional programming.
+
+Technologies and languages Used - 
+HTML
+CSS 
+JavaScript
+
+Features -
+1. Built with HTML, CSS and JavaScript
+2. DOM-based
+3. Hosted on GitHub Pages
+
+Installation Walkthrough-
+Step 1: 
+
+clone my game-
+
+Run this code in a terminal. Preferably bash - git clone https://github.com/2PPSY_BATTLE.git
+
+![image](https://user-images.githubusercontent.com/113143898/202559005-fef10de9-bb8e-41d1-98bf-613ddf4980eb.png)
+
+Step 2: 
+
+Grab this file and open it in your browser!
+![image](https://user-images.githubusercontent.com/113143898/202559534-d5c8df17-916c-464f-9d70-4c07d075f3c9.png)
+
+Step 3:
+Play the game!
+
+Game Mechanics-
+
+1. 2 players 
+2. Win State
+3. Lose State
+4. Multiple Rounds(turns)
+
+Stretch Goals-
+
+Dual Phase States - phases are not the same as states. 
+Adjust phases to have 2 two states so that phases and states can be the same. AND THE PLAYER CAN CHOOSE 2.
+
+Add graphics - characters and animations.
+
+Atb bar aesthetics.
+
+Refactor in Next.js and TypeScript
+
+Acknowledgements-
+1. Inspired by System Shock II, MegaMan games and RPG Maker XP.
+2. Images in the background are not owned by me but are heavily
+edited with several more that are made from screenshots. 
+
+Disclaimer -
+I am not an affiliate of any kind by with coporate entity listed above.
+This is mostly an original project and said characters are my own.
+The Game title however is a 1991 Japanese OVA anime film created by
+Toei Animation based on a novel written by Yasuaki Kadota.
+This project is completely noprofit.
