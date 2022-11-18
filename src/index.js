@@ -17,11 +17,6 @@ const ACR =
     spd: 1 // 13
 };
 
-//var canvas = document.querySelector('canvas');
-//console.log(canvas);
-//canvas.width = window.innerWidth;
-//canvas.height = window.innerHeight;
-
 var z = document.getElementById('z');
 var x = document.getElementById('x');
 var c = document.getElementById('c');
