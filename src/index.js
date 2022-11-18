@@ -9,11 +9,12 @@ const ACR =
     sta: 2,// 5
     eth: 5,// 6
     pos: 10,// 7
-    neg: 0,// 8
+    neg: -10,// 8
     maxAtbCharge: 10,// 9
     currentATBCharge: 1,// 10
     phase: '',// 11
     charN: '',// 12
+    spd: 1 // 13
 };
 
 //var canvas = document.querySelector('canvas');
@@ -29,8 +30,8 @@ var i = document.getElementById('i');
 var o = document.getElementById('o');
 var p = document.getElementById('p');
 
-var k = document.getElementById('n1');
-var u = document.getElementById('n2');
+var k = document.getElementById('k');
+var u = document.getElementById('u');
 
 var p1L = document.getElementById('d1ev');
 var p1S = document.getElementById('P1Stats');
@@ -44,6 +45,9 @@ var addm = document.getElementById('medDia');
 
 var p2El = document.getElementById('table');
 var p1El = document.getElementById('manuel');
+
+var etc1 = document.getElementById('etc1');
+var etc2 = document.getElementById('etc2');
 
 var phEnum = [
   'start', //0 
@@ -69,10 +73,12 @@ let stmin = 1;
 let stmax = 5;
 let posmin = 1;
 let posmax = 15;
-let negmin = -15; // reversed
-let negmax = 0; // plane
+let negmin = 0; // reversed
+let negmax = -15; // plane
 let gameOver = false;
 let turnPh = false;
+let currentATBCharge = 1;
+let maxAtbCharge = 5;
 
 function setPlATBC(PT)
 {
@@ -81,7 +87,7 @@ function setPlATBC(PT)
 
 function playerATBCharge(PT)
 {
-    PT[10] += 1;
+    (PT[10] += 1) * (atbFillRate() - DecreasedATB());
 }
 
 var logMe = document.getElementById('logBox');
@@ -91,7 +97,7 @@ function outputColor(idn){
 
 function log(l)
 {
-    logMe.innerText += '\n' + l;
+  logMe.innerText += '\n' + l;
 } 
 
 function clearLog()
@@ -132,10 +138,10 @@ const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 randT = (hmax, hmin) => Math.floor(Math.random() * (hmax - hmin + 1)) + hmin;
 
-// randomizer 6 stats are set and working %defaults%
-P1 = [randT(hpmax, hpmin),randT(atmax, atmin),randT(accmax, accmin),randT(dfmax, dfmin),randT(psmax, psmin),randT(stmax, stmin), randT(10, 7), randT(0, 4), 0, 1, 1,'','Manuel'];
+// randomizer stats are set and working %defaults%
+P1 = [randT(hpmax, hpmin),randT(atmax, atmin),randT(accmax, accmin),randT(dfmax, dfmin),randT(psmax, psmin),randT(stmax, stmin),randT(10, 7), randT(posmin, posmax),randT(negmin, negmax),10,1,'','Manuel',randT(stmin, stmax)];
 
-P2 = [randT(hpmax, hpmin),randT(atmax, atmin),randT(accmax, accmin),randT(dfmax, dfmin),randT(psmax, psmin),randT(stmax, stmin), randT(10, 7), randT(0, 4), 0, 1, 1,'','Table'];
+P2 = [randT(hpmax, hpmin),randT(atmax, atmin),randT(accmax, accmin),randT(dfmax, dfmin),randT(psmax, psmin),randT(stmax, stmin),randT(10, 7), randT(posmin, posmax),randT(negmin, negmax),10,1,'','Table',randT(stmin, stmax)];
 
 function displayP1Stats()
 {
@@ -145,7 +151,10 @@ function displayP1Stats()
         <div id="np1Acc">Acc:${P1[2]} </div>
         <div id="np1Atk">Atk:${P1[1]} </div>
         <div> Psy:${P1[4]} </div>
-        <div id="np1Sta">Sta:${P1[5]} </div>`;
+        <div id="np1Sta">Sta:${P1[5]} </div>
+        <div id="np1Pos">Pos:${P1[7]} </div>
+        <div id="np1Neg">Neg:${P1[8]} </div>
+        <div id="np1Sta">Spd:${P1[13]} </div>`;
 }
 
 function displayP2Stats()
@@ -156,23 +165,76 @@ function displayP2Stats()
         <div id="np2Acc">Acc: ${P2[2]} </div>
         <div id="np2Atk">Atk: ${P2[1]} </div>
         <div> Psy:${P2[4]} </div>
-        <div id="np2Sta">Sta: ${P2[5]} </div>`;
+        <div id="np2Sta">Sta: ${P2[5]} </div>
+        <div id="np1Pos">Pos:${P2[7]} </div>
+        <div id="np1Neg">Neg:${P2[8]} </div>
+        <div id="np1Sta">Spd:${P2[13]} </div>`;
 }
 
 displayP1Stats(); // works and
 displayP2Stats(); // works
 
-function DecreasedATB(factor = 1)
+function AtbLoader()
 {
-    currentATBCharge = clamp(currentATBCharge - (factor * maxAtbCharge), 0, maxAtbCharge);
+  while (P1[9] < P1[10] && P2[9] < P2[10]) 
+  {
+    atbChargers();
+    if (P1[9] < P1[10]) 
+    {
+      P1[11] == 'turn';
+      p1T = true;
+      break;
+    }
+    else if (P2[9] < P2[10])
+    {
+      P2[11] == 'turn';
+      p2T = true;
+      break;
+    }
+  }
 }
 
-function setCurrentATB(newCharge)
+function turnCall()
 {
-    currentATBCharge = newCharge;
+  if (p1T == true) 
+  {
+      P1[11] == 'turn';
+    ActionBase();
+  }
+  else if (p2T == true) 
+  {
+      P2[11] == 'turn';
+    actionBase2(P2, P1);
+  }
+  return;
+}
+
+function DecreasedATB(factor = 1)
+{
+    return currentATBCharge = clamp(currentATBCharge - (factor * maxAtbCharge), 0, maxAtbCharge);
 }
 
 // controls
+function showP1Charger()
+{
+  k.style.display = 'block';
+}
+
+function hideP1Charger()
+{
+  k.style.display = 'none';
+}
+
+function showP2Charger()
+{
+  u.style.display = 'block';
+}
+
+function hideP2Charger()
+{
+  u.style.display = 'block';
+}
+
 function showOptionsP1()
 {
     c.style.display = 'block'; 
@@ -206,6 +268,126 @@ function PsiOverEx(PT)
     log(`${PT[12]} has suffered from psionic over-exersion...`);
 }
 
+function chargeEtherP1(max)
+{
+  //k.style.display = 'block';
+  hideOptionsP1();
+  hideOptionsP2();
+  var ig = 0;
+  etc1.innerHTML = `EtCharge: ${ig}`;
+    k.onkeydown = function (){
+        ig++;
+        etc1.innerHTML = `EtCharge: ${++ig}`;
+      };
+  
+  k.onkeyup = function () {
+    if (ig >= 0) {
+      if (max < ig) {
+        log(`${max} ether has been used..`);
+        psy(P1, max);
+        return max;
+      }
+      else{
+        log(`${ig} ether has been used..`);
+        psy(P1, ig);
+        return ig;
+      }
+    }
+    return ig;
+  };
+}
+function ActionBase(){
+  z.onclick = function() {
+    log('attacking!!!');
+    allydmgLog(P1, P2);
+    p1T = false;
+    
+  };
+  x.onclick = function() {
+    clearLog();
+    p1T =false;
+    log('Using Psi');
+    if (P1[6] <= 0) {
+        log('Insufficient Ether.');
+        //PT.miss = 0;
+    }
+    else{
+        log('How much...?');
+        // charge function
+        log(`dont let the 'med => gray'`);
+        log(`go outside the blue or red`);
+        
+        var maxEth = P1[6];
+        display_dials();
+        // calc and reduction happens here
+        showP1Charger();
+        chargeEtherP1(maxEth);
+        }
+      };
+  c.onclick = function() 
+  {
+    p1T = false;
+  log('defence is chosen');
+  // guard graphic here --<
+  P1[11] = 'defending';
+    battleProcessing2();
+  };
+}
+
+function chargeEtherP2(max) {
+  u.style.display = 'block';
+  hideOptionsP1();
+  hideOptionsP2();
+  var ig = 0;
+  u.onkeydown = function () {
+    u.textContent = `${++ig}`;
+  };
+
+  u.onkeyup = function () {
+    log(`${ig} ether has been used..`);
+    return ig;
+  };
+  
+  if (max < psy(P2, ig)) {
+    return max;
+  }
+}
+
+function etherChecks(PT, etherOut, posDia, median, negDia)
+{
+// ether shift mitigation && // dial shift consequence
+  if (median > posDia || posDia < negDia) 
+  {
+      median -= etherOut;
+      posDia += (etherOut) * 2;
+      PT[7] = posDia;
+      PT[8] = negDia;
+      if (posDia < negDia) 
+      {
+        PsiOverEx(PT);
+          gameOver = true;
+      }
+    return etherOut;
+  }
+  else if (median < negDia || posDia < negDia) 
+  {
+      median += etherOut;
+      negDia -= (etherOut) * 2;
+      PT[7] = posDia;
+      PT[8] = negDia;
+      if (negDia > posDia) 
+      {
+        PsiOverEx(PT);
+          gameOver = true;
+      }
+    return etherOut;
+  }
+  else
+  {
+    return etherOut;
+  }
+}
+
 function psy(PT, etherOut = 0)
 {
   display_dials();
@@ -217,43 +399,16 @@ function psy(PT, etherOut = 0)
     var negDia = PT[8];
     var median = (posDia + negDia) / 2;
     
-    // ether shift mitigation && // dial shift consequence
-    if (etherOut > posDia || median > posDia) 
-    {
-        negDia -= etherOut;
-        if (posDia < negDia) 
-        {
-            gameOver = true;
-        }
-    }
-    else if (median < negDia || median < negDia) 
-    {
-        posDia += etherOut;
-        if (posDia > negDia) 
-        {
-            gameOver = true;
-        }
-    }
-    else if(etherOut === median)
+    etherOut = etherChecks(PT, etherOut, posDia, median, negDia);
+
+    if(etherOut === median)
     {
       hide_dials();
-        outputOOO = (negDia + etherOut + posDia)* 100;
+      outputOOO = (negDia + etherOut + posDia) * 100;
     }
 
-    let min = Math.ceil(negDia);
-    let max = Math.floor(posDia);
-
-    if (Math.floor(Math.random() * (max - min + 1)) + etherOut > posDia || Math.floor(Math.random() * (max - min + 1)) + etherOut < negDia) 
-    {
-        PsiOverEx(PT);
-        gameOver = true;
-        hide_dials();
-    }
-    else
-    {
-        outputOOO = negDia + etherOut + posDia;
-        log(`${negDia + etherOut + posDia} = PsiDmg ouput`);
-    }
+      outputOOO = negDia + etherOut + posDia;
+      log(`${negDia + etherOut + posDia} = PsiDmg ouput`);
     PT[7] = posDia;
     PT[8] = negDia;
     hide_dials();
@@ -271,34 +426,6 @@ function defend(PT, A)
     A -= PT[3];
     return A; // output and call if def is chosen
 }
-
-function chargeEther(max)
-{
-  hideOptionsP1();
-  hideOptionsP2();
-  var ig = 0;
-  k.onkeydown = function () {
-    k.textContent = `${++ig}`;
-  };
-
-  k.onkeyup = function () {
-    log(`${ig} ether has been used..`);
-    return ig;
-  };
-
-  u.onkeydown = function () {
-    u.textContent = `${++ig}`;
-  };
-
-  u.onkeyup = function () {
-    log(`${ig} ether has been used..`);
-    return ig;
-  };
-  if (max < ig) {
-    return max;
-  }
-  
-}
     // await means waiting on the function in que then execution of everything else.
 
     function endGame() 
@@ -312,7 +439,6 @@ function chargeEther(max)
         log('For all psychics.');
     }
 
-
     function display_dials()
     {
       posi.style.display = 'block';
@@ -325,49 +451,13 @@ function chargeEther(max)
     {
       document.getElementById('dials').style.display = 'none';
     }
-          
-    function actionBase(PT, T)
-    {
-        z.onclick = function() {
-            log('attacking!!!');
-            allydmgLog(PT, T);
-        };
-        x.onclick = function() {
-          
-            if (PT[6] <= 0) {
-                log('Insufficient Ether.');
-                //PT.miss = 0;
-            }
-            else{
-                log('How much...?');
-                // charge function
-                log(`dont let the 'med'`);
-                log(`go outside the blue or red`);
-                log('Using Psi');
-                var maxEth = PT[6];
-                display_dials();
-                // calc and reduction happens here
-                psy(PT, chargeEther(maxEth));
-            }
-        };
-        c.onclick = function() 
-        {
-          log('defence is chosen');
-          // guard graphic here --<
-          PT[11] = 'defending';
-          // pre-calculated dmg output here
-          battleProcessing();
-          // <------------------------
-          //retreat();
-        };
-    }
 
     function actionBase2(PT, T)
     {
       i.onclick = function() {
         log('attacking!!!');
         allydmgLog(PT, T);
-    };
+      };
     o.onclick = function() {
       
         if (PT[6] <= 0) {
@@ -392,9 +482,8 @@ function chargeEther(max)
         // guard graphic here --<
         PT[11] = 'defending';
         // pre-calculated dmg output here
-        battleProcessing();
-        // <------------------------
-        //retreat();
+        battleProcessing1();
+        p1T = true;
       };
     }
     // async battle functions
@@ -450,12 +539,11 @@ function chargeEther(max)
             log('You hit em! NICE!');
             hideOptionsP1();
             hideOptionsP2();
-            setTimeout(() => 
-            {
                 if (T[11] == phEnum[5]) 
                 {
                   log(`${T[12]}` + 'defends.');
-                  log(`${PT[12]} attacks for : ${attack(defend(PT,T[1]), T)}`);
+                  log(`${PT[12]} attacks for : ${attack(defend(PT, T[1]), T)}`);
+                  battleProcessing();
                 }
                 if (T[0] > 0) 
                 {
@@ -472,7 +560,7 @@ function chargeEther(max)
                   }
                   else
                   {
-                      playerPhase();
+                    battleProcessing();
                   }
                 }
                 if (PT[0] <= 0)
@@ -480,12 +568,11 @@ function chargeEther(max)
                 // 
                   gameOver = true;
                 }
-            },1000);
       }
         else
         {
             log('you missed!');
-            battleProcessing();
+            battleProcessing2();
         }
     }
 
@@ -510,7 +597,7 @@ function atbFillRate()
 
 updateAtb = function(PT) {
   //  PT[x] = find atb stat
-  PT[9] = Math.min(PT[10] + atbFillRate(), atbMax());
+  PT[9] = Math.min(PT[10] + atbFillRate() * PT[13], atbMax());
 };
 // updater
 
@@ -519,17 +606,10 @@ updateFrame = function() {
 };
 
 function atbChargers()
-  {
-    while(P1[9] > P1[10] && P2[9] > P2[10])
-    {
-      if(turnPh == false)
-      {
-        break;
-      }
-      playerATBCharge(P1 * atbFillRate());
-      playerATBCharge(P2 * atbFillRate());
-    }
-  }
+{
+  playerATBCharge(P1);
+  playerATBCharge(P2);
+}
 
   function hpCheck()
   {
@@ -542,11 +622,13 @@ function atbChargers()
     {
         // call winner 
         winnerChosen = true;
+        log(`${P1[12]} is the Winner!`);
     }
     else if(P2[0] <= 0 && P1[0] > 0)
     {
         //call winner
         winnerChosen = true;
+        log(`${P2[12]} is the Winner!`);
     }
     else
     {
@@ -573,21 +655,12 @@ function atbChargers()
 // };
 
 
-function battleProcessing()
-    {
-        hideOptionsP1();
-        hideOptionsP2();
-    // player coin toss
-        if (coinTossed == false) 
-        {
-            //ds
-        }
-
-          
-          
-    }
-
-async function battleProcessing2()
+function hideOptions()
+{
+    hideOptionsP1();
+    hideOptionsP2();
+}
+function battleProcessing2()
 {
   // test stuff here
   dLog(false);
@@ -601,7 +674,7 @@ async function battleProcessing2()
   // cointoss check
   if(coinTossed == false){
     do
-    {await coinToss();
+    {coinToss();
    // segment 1 
     if (p1T == true && p2T == true) 
     {
