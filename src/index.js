@@ -87,7 +87,7 @@ function setPlATBC(PT)
 
 function playerATBCharge(PT)
 {
-    (PT[10] += 1) * (atbFillRate() - DecreasedATB());
+    (PT[10] += 1);
 }
 
 var logMe = document.getElementById('logBox');
@@ -134,8 +134,6 @@ var pointP2C = 0;
 let P1 = ACR[11]; // cust these stats
 let P2 = ACR[11]; // cust these stats
 
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-
 randT = (hmax, hmin) => Math.floor(Math.random() * (hmax - hmin + 1)) + hmin;
 
 // randomizer stats are set and working %defaults%
@@ -178,40 +176,21 @@ function AtbLoader()
 {
   while (P1[9] < P1[10] && P2[9] < P2[10]) 
   {
-    atbChargers();
     if (P1[9] < P1[10]) 
     {
+      atbChargers();
       P1[11] == 'turn';
       p1T = true;
       break;
     }
     else if (P2[9] < P2[10])
     {
+      atbChargers();
       P2[11] == 'turn';
       p2T = true;
       break;
     }
   }
-}
-
-function turnCall()
-{
-  if (p1T == true) 
-  {
-      P1[11] == 'turn';
-    ActionBase();
-  }
-  else if (p2T == true) 
-  {
-      P2[11] == 'turn';
-    actionBase2(P2, P1);
-  }
-  return;
-}
-
-function DecreasedATB(factor = 1)
-{
-    return currentATBCharge = clamp(currentATBCharge - (factor * maxAtbCharge), 0, maxAtbCharge);
 }
 
 // controls
@@ -270,7 +249,6 @@ function PsiOverEx(PT)
 
 function chargeEtherP1(max)
 {
-  //k.style.display = 'block';
   hideOptionsP1();
   hideOptionsP2();
   var ig = 0;
@@ -301,15 +279,14 @@ function ActionBase(){
     log('attacking!!!');
     allydmgLog(P1, P2);
     p1T = false;
-    
   };
   x.onclick = function() {
     clearLog();
-    p1T =false;
+    p1T = false;
     log('Using Psi');
-    if (P1[6] <= 0) {
+    if (P1[6] <= 0)
+    {
         log('Insufficient Ether.');
-        //PT.miss = 0;
     }
     else{
         log('How much...?');
@@ -319,6 +296,10 @@ function ActionBase(){
         
         var maxEth = P1[6];
         display_dials();
+        var dialnumP = document.getElementById('posI').innerHTML = `${P1[7]}`;
+        var dialnumN = document.getElementById('negI').innerHTML = `${P1[8]}`;
+        var medi = (P1[7] + P1[8])/2;
+        var dialnumM = document.getElementById('medI').innerHTML = `${medi}`;
         // calc and reduction happens here
         showP1Charger();
         chargeEtherP1(maxEth);
@@ -330,27 +311,35 @@ function ActionBase(){
   log('defence is chosen');
   // guard graphic here --<
   P1[11] = 'defending';
-    battleProcessing2();
+  showOptionsP2();
   };
 }
 
 function chargeEtherP2(max) {
-  u.style.display = 'block';
   hideOptionsP1();
   hideOptionsP2();
   var ig = 0;
-  u.onkeydown = function () {
-    u.textContent = `${++ig}`;
-  };
-
+  etc1.innerHTML = `EtCharge: ${ig}`;
+    u.onkeydown = function (){
+        ig++;
+        etc1.innerHTML = `EtCharge: ${++ig}`;
+      };
+  
   u.onkeyup = function () {
-    log(`${ig} ether has been used..`);
+    if (ig >= 0) {
+      if (max < ig) {
+        log(`${max} ether has been used..`);
+        psy(P2, max);
+        return max;
+      }
+      else{
+        log(`${ig} ether has been used..`);
+        psy(P2, ig);
+        return ig;
+      }
+    }
     return ig;
   };
-  
-  if (max < psy(P2, ig)) {
-    return max;
-  }
 }
 
 function etherChecks(PT, etherOut, posDia, median, negDia)
@@ -456,34 +445,41 @@ function defend(PT, A)
     {
       i.onclick = function() {
         log('attacking!!!');
-        allydmgLog(PT, T);
+        allydmgLog(P2, P1);
+        p2T = false;
       };
-    o.onclick = function() {
-      
-        if (PT[6] <= 0) {
+      o.onclick = function() {
+        clearLog();
+        p2T = false;
+        log('Using Psi');
+        if (P2[6] <= 0)
+        {
             log('Insufficient Ether.');
-            //PT.miss = 0;
         }
         else{
             log('How much...?');
             // charge function
-            log(`dont let the 'med'`);
+            log(`dont let the 'med => gray'`);
             log(`go outside the blue or red`);
-            log('Using Psi');
-            var maxEth = PT[6];
+            
+            var maxEth = P2[6];
             display_dials();
+            var dialnumP = document.getElementById('posI').innerHTML = `${P2[7]}`;
+            var dialnumN = document.getElementById('negI').innerHTML = `${P2[8]}`;
+            var medi = (P2[7] + P2[8])/2;
+            var dialnumM = document.getElementById('medI').innerHTML = `${medi}`;
             // calc and reduction happens here
-            psy(PT, chargeEther(maxEth));
-        }
-    };
+            showP2Charger();
+            chargeEtherP2(maxEth);
+            }
+          };
       p.onclick = function() 
       {
-        log('defence is chosen');
-        // guard graphic here --<
-        PT[11] = 'defending';
-        // pre-calculated dmg output here
-        battleProcessing1();
-        p1T = true;
+        p2T = false;
+      log('defence is chosen');
+      // guard graphic here --<
+      P2[11] = 'defending';
+      showOptionsP2();
       };
     }
     // async battle functions
@@ -543,13 +539,11 @@ function defend(PT, A)
                 {
                   log(`${T[12]}` + 'defends.');
                   log(`${PT[12]} attacks for : ${attack(defend(PT, T[1]), T)}`);
-                  battleProcessing();
                 }
                 if (T[0] > 0) 
                 {
-                    log(`${PT[12]} attacks for : ${PT[1]}`); // leave this
+                  log(`${PT[12]} attacks for : ${PT[1]}`); // leave this
                     // play Target hurt anim
-                    battleProcessing();
                 }
                 else
                 {
@@ -560,7 +554,7 @@ function defend(PT, A)
                   }
                   else
                   {
-                    battleProcessing();
+                    coinToss = false;
                   }
                 }
                 if (PT[0] <= 0)
@@ -572,18 +566,12 @@ function defend(PT, A)
         else
         {
             log('you missed!');
-            battleProcessing2();
         }
     }
 
-gameParty1 = [];
-gameParty2 = [];
-gameParty1[0] = P1;
-gameParty2[0] = P2;
-//party initializer
-// initMembers = function() {
-//     initAtb();
-// };
+var battlers = [1];
+battlers[0] = P1;
+battlers[1] = P2;
 
 atbMax = function()
 {
@@ -598,11 +586,6 @@ function atbFillRate()
 updateAtb = function(PT) {
   //  PT[x] = find atb stat
   PT[9] = Math.min(PT[10] + atbFillRate() * PT[13], atbMax());
-};
-// updater
-
-updateFrame = function() {
-  updateAtb();
 };
 
 function atbChargers()
@@ -637,23 +620,6 @@ function atbChargers()
     }
   }
 
-// drawActorAtb = function(actor, x, y, width) {
-//   width = width || 186;
-//   var atb = actor.atb();
-//   var atbMax = actor.atbMax();
-//   var color1 = hpGaugeColor1();
-//   var color2 = hpGaugeColor2();
-//   drawGauge(x, y, width, atb / atbMax, color1, color2);
-//   changeTextColor(systemColor());
-//   drawText("ATB", x, y, 44);
-// };
-
-// drawGaugeAreaWithTp = function(rect, actor) {    
-//   this.drawActorHp(actor, rect.x + 0, rect.y, 108);
-//   this.drawActorMp(actor, rect.x + 123, rect.y, 96);
-//   this.drawActorAtb(actor, rect.x + 234, rect.y, 96);
-// };
-
 
 function hideOptions()
 {
@@ -662,19 +628,16 @@ function hideOptions()
 }
 function battleProcessing2()
 {
-  // test stuff here
   dLog(false);
-  // hide shit
+  // hide stuff
   hideOptionsP1();
   hideOptionsP2();
-  //displayP1Stats(); // auto
-  //displayP2Stats(); // updates
   hide_dials(); // works
-  //display_dials(); // both work
-  // cointoss check
-  if(coinTossed == false){
+  if(coinTossed == false)
+  {
     do
-    {coinToss();
+    {
+      coinToss();
    // segment 1 
     if (p1T == true && p2T == true) 
     {
@@ -695,51 +658,151 @@ function battleProcessing2()
   }
   else{
     // hp check
+    if(gameOver == true)
+    { 
+      hideOptionsP1();
+      hideOptionsP2();
+    }
+    else if(P1[0] <= 0 && P2[0] > 0)
+    {
+        // call winner 
+        winnerChosen = true;
+    }
+    else if(P2[0] <= 0 && P1[0] > 0)
+    {
+        //call winner
+        winnerChosen = true;
+    }
+    if (p1T == true)
+    {
+      clearLog();
+      log('Player1 turn...');
+      log('Attack / Psi / Defend');
+      showOptionsP1();
+      displayP1Stats();
+      actionBase(P1, P2);
+      clearAtb(P1);
+        p1T = false;
+    }
+    else if (p2T == true)
+    {
+      clearLog();
+      log('Player2 turn...');
+      log('Attack / Psi / Defend');
+      showOptionsP2();
+      displayP2Stats();
+      actionBase2(P2, P1);
+      clearAtb(P2);
+        p2T = false;
+    }
     hpCheck();
   }
-  
-
   setTimeout(() => {
-      // ues a switch statement
+      // use a switch statement
   switch(coinTossed)
   {
     case true:
     {
-      if (p1T == true)
-      {
+        hpCheck();
         clearLog();
-        log('Player1 turn...');
-        log('Attack / Psi / Defend');
-        showOptionsP1();
-        //displayP1Stats();
-        actionBase(P1, P2);
-        clearAtb(P1);
-          p1T = false;
-      }
-      else if (p2T == true)
-      {
-        clearLog();
-        log('Player2 turn...');
-        log('Attack / Psi / Defend');
-        showOptionsP2();
-        //displayP2Stats();
-        actionBase2(P2, P1);
-        clearAtb(P2);
-          p2T = false;
-      }
-    }
-    default:
-    {
-      // main loop
+        if (p1T == true)
+          {
+            clearLog();
+            log('Player1 turn...');
+            log('Attack / Psi / Defend');
+            showOptionsP1();
+            clearAtb(P1);
+            ActionBase();
+            
+              p1T = false;
+          }
+          else if (p2T == true)
+          {
+            clearLog();
+            log('Player2 turn...');
+            log('Attack / Psi / Defend');
+            showOptionsP2();
+            clearAtb(P2);
+            actionBase2(P2, P1);
+            
+              p2T = false;
+          }
+          if (P1[0] > 0 && P2[0] > 0) 
+          {
+            battlers.push(P1);
+            battlers.push(P2);
+          }
     }
   }
+    return;
   }, 1000);
-
-  // segement 2
-  setTimeout(() =>{
-    log('to the moon!');
-  }, 2000);
-  var here = 0;
+  atbChargers();
 }
+async function battleProcessing()
+    {
+        hide_dials();
+        hideOptionsP1();
+        hideOptionsP2();
+    // player coin toss
+        if (coinTossed == false) 
+        {
+            await coinToss();
+            battleProcessing();
 
+            if (p1T == true && p2T == true) 
+            {
+                log('retoss!');
+                coinTossed = false;
+                p1T = null;
+                p2T = null;
+                battleProcessing();
+            }
+            else if (p1T == false && p2T == false)
+            {
+                log('retoss!');
+                coinTossed = false;
+                p1T = null;
+                p2T = null;
+                battleProcessing();
+            }
+        }
+
+          if(gameOver == true)
+          { 
+            hideOptionsP1();
+            hideOptionsP2();
+          }
+          else if(P1[0] <= 0 && P2[0] > 0)
+          {
+              // call winner 
+              winnerChosen = true;
+          }
+          else if(P2[0] <= 0 && P1[0] > 0)
+          {
+              //call winner
+              winnerChosen = true;
+          }
+          if (p1T == true)
+          {
+            clearLog();
+            log('Player1 turn...');
+            log('Attack / Psi / Defend');
+            showOptionsP1();
+            //displayP1Stats();
+            actionBase(P1, P2);
+            clearAtb(P1);
+              p1T = false;
+          }
+          else if (p2T == true)
+          {
+            clearLog();
+            log('Player2 turn...');
+            log('Attack / Psi / Defend');
+            showOptionsP2();
+            //displayP2Stats();
+            actionBase2(P2, P1);
+            clearAtb(P2);
+              p2T = false;
+          }
+    }
 battleProcessing2();
