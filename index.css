@@ -14,7 +14,7 @@ html
 
 #P2Stats
 {
-    translate: 1300px -230px;
+    translate: 1300px -210px;
 }
 
 #etc2{
@@ -45,14 +45,14 @@ html
     color:rgb(255, 212, 208);
     position:fixed;
     flex:auto;
-    translate: 1160px 490px;
+    translate: 1160px 290px;
 }
 
 #posDia
 {
     flex:auto;
     position: absolute;
-    translate: 1135px 470px;
+    translate: 1135px 270px;
 }
 
 #dials
@@ -65,14 +65,14 @@ html
     color:rgb(198, 232, 255);
     flex:auto;
     position: fixed;
-    translate: 335px 490px;
+    translate: 335px 290px;
 }
 
 #negDia
 {
     flex:auto;
     position: absolute;
-    translate: 310px 470px;
+    translate: 310px 270px;
     align-items: inherit;
 }
 
@@ -81,14 +81,14 @@ html
     color:rgb(255, 255, 255);
     position: fixed;
     flex:auto;
-    translate: 750px 490px;
+    translate: 750px 290px;
 }
 
 #medDia
 {
     flex: auto;
     position: absolute;
-    translate: 725px 470px;
+    translate: 725px 270px;
 }
 
 #table
@@ -190,7 +190,7 @@ body
     border-left: 4px;
     box-shadow: 5px 5px 1px 1px lightgreen;
     box-shadow: 4px 4px -10px -10px lightgreen;
-    background-color: rgba(127, 255, 212, 0.281);
+    background-color: rgba(127, 255, 212, 0.71);
     height: fit-content;
     color: rgb(161, 216, 255);
 }
