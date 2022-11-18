@@ -314,10 +314,10 @@ function chargeEtherP2(max) {
   hideOptionsP1();
   hideOptionsP2();
   var ig = 0;
-  etc1.innerHTML = `EtCharge: ${ig}`;
+  etc2.innerHTML = `EtCharge: ${ig}`;
     u.onkeydown = function (){
         ig++;
-        etc1.innerHTML = `EtCharge: ${++ig}`;
+        etc2.innerHTML = `EtCharge: ${++ig}`;
       };
   
   u.onkeyup = function () {
