@@ -78,6 +78,14 @@ Grab this file and open it in your browser!
 Step 3:
 Play the game!
 
+Attack -> executes an attack and then atb charges for your next turn
+Psy -> takes you to the three dials and the numerics that guide how high or low you are attributing your Grey 
+Median Dial using Psi, you gotta press Psy again + 'Space Bar' and hold the two until your 'EthCharge: #'
+reaches a point where you're comfortable. Be forewarned, DO NOT try to burn all of your Ether. 
+This might kill you from the already mentioned Psionic overexertion.
+
+Defend - > Gives you a defence position and goes ends that turn.
+
 Game Mechanics-
 
 1. 2 players 
@@ -95,6 +103,8 @@ Add graphics - characters and animations.
 Atb bar aesthetics.
 
 Refactor in Next.js and TypeScript
+
+Graphical Shift movement for the Psi Polar dials
 
 Resources Used - 
 https://github.com/glnewton/Green-Things-vs-Dead-Things/blob/main/README.md
