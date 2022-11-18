@@ -1,4 +1,4 @@
-// pts for total cust, 0 - 12 properties
+// pts for total cust, 0 - 13 properties
 const ACR = 
 {
     hp: 6,  // 0
