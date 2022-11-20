@@ -733,7 +733,7 @@ function battleProcessing2()
   }, 1000);
   atbChargers();
 }
-async function battleProcessing()
+ function battleProcessing()
     {
         hide_dials();
         hideOptionsP1();
@@ -741,7 +741,7 @@ async function battleProcessing()
     // player coin toss
         if (coinTossed == false) 
         {
-            await coinToss();
+            coinToss();
             battleProcessing();
 
             if (p1T == true && p2T == true) 
@@ -800,4 +800,59 @@ async function battleProcessing()
               p2T = false;
           }
     }
+function bpc()
+{
+        hideOptionsP1();
+        hideOptionsP2();
+    // player coin toss
+        if (coinTossed == false) 
+        {
+          coinToss();
+          xfg();
+        }
+        if(P1[0] <= 0 && P2[0] > 0)
+        {
+            // call winner 
+        }
+        else if(P2[0] <= 0 && P1[0] > 0)
+        {
+            //call winner
+        }
+        if (p1T == true && p2T == false)
+        {
+            playerPhase();
+            // timerThf(3000, 1);
+            // playerPhase();
+            //p1T = false; there's no reason to change this hierarchy
+        }
+        else if (p2T == true && p1T == false)
+        {
+            playerPhase();
+            // timerThf(3000, 1);
+            // playerPhase();
+            //p2T = false; leave this here like this.
+        // leave this alone.
+        }
+        timerThf(300, 1); // thirty frames
+    }
+
+}
+function xfg(){
+if (p1T == true && p2T == true) 
+            {
+                log('retoss!');
+                coinTossed = false;
+                p1T = null;
+                p2T = null;
+                battleProcessing();
+            }
+  else if (p1T == false && p2T == false)
+            {
+                log('retoss!');
+                coinTossed = false;
+                p1T = null;
+                p2T = null;
+                battleProcessing();
+            }
+}
 battleProcessing2();
