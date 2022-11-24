@@ -1,4 +1,4 @@
-// pts for total cust, 0 - 13 properties
+// pts for total cust, 0 - 12 properties
 const ACR = 
 {
     hp: 6,  // 0
@@ -110,14 +110,8 @@ function dLog(yu = false)
 }
 
 display_dials();
-// normal output
-//outputColor('white');
-// dmg 
-outputColor('rgb(238, 255, 248)');
 
-// dialogue
-//outputColor('blue');
-//outputColor('darkblue'); // noice
+outputColor('rgb(238, 255, 248)');
 
 var coinTossed = false;
 var p1T = false;
@@ -209,14 +203,14 @@ function hideP2Charger()
   u.style.display = 'block';
 }
 
-function showOptionsP1()
+async function showOptionsP1()
 {
     c.style.display = 'block'; 
     z.style.display = 'block'; 
     x.style.display = 'block';
 }
 
-function showOptionsP2()
+async function showOptionsP2()
 {
     i.style.display = 'block'; 
     o.style.display = 'block'; 
@@ -273,11 +267,11 @@ function ActionBase(){
   z.onclick = function() {
     log('attacking!!!');
     allydmgLog(P1, P2);
-    p1T = false;
+    p2T = true;
   };
   x.onclick = function() {
     clearLog();
-    p1T = false;
+    p2T = true;
     log('Using Psi');
     if (P1[6] <= 0)
     {
@@ -302,11 +296,12 @@ function ActionBase(){
       };
   c.onclick = function() 
   {
-    p1T = false;
+    p2T = true;
   log('defence is chosen');
   // guard graphic here --<
   P1[11] = 'defending';
-  showOptionsP2();
+  //showOptionsP2();
+  return;
   };
 }
 
@@ -534,11 +529,13 @@ function defend(PT, A)
                 {
                   log(`${T[12]}` + 'defends.');
                   log(`${PT[12]} attacks for : ${attack(defend(PT, T[1]), T)}`);
+                  T[11] = 'turn';
                 }
                 if (T[0] > 0) 
                 {
                   log(`${PT[12]} attacks for : ${PT[1]}`); // leave this
                     // play Target hurt anim
+                    battleProcessing3();
                 }
                 else
                 {
@@ -557,10 +554,12 @@ function defend(PT, A)
                 // 
                   gameOver = true;
                 }
+        battleProcessing3();
       }
         else
         {
             log('you missed!');
+            battleProcessing3();
         }
     }
 
@@ -621,38 +620,22 @@ function hideOptions()
     hideOptionsP1();
     hideOptionsP2();
 }
-function battleProcessing2()
+
+function battleProcessing()
 {
-  dLog(false);
-  // hide stuff
+  hide_dials();
   hideOptionsP1();
   hideOptionsP2();
-  hide_dials(); // works
-  if(coinTossed == false)
+  //player coin toss
+  if (coinTossed == false) 
   {
-    do
-    {
       coinToss();
-   // segment 1 
-    if (p1T == true && p2T == true) 
-    {
-        log('retoss!');
-        coinTossed = false;
-        p1T = null;
-        p2T = null;
-        coinToss();
-    }
-    else if (p1T == false && p2T == false)
-    {
-        log('retoss!');
-        coinTossed = false;
-        p1T = null;
-        p2T = null;
-        coinToss();
-    }} while(p1T == false && p2T == false || p1T == true && p2T == true); // clean and lean!
+      battleProcessing();
+      xfg();
   }
-  else{
-    // hp check
+  for (let i = 0; i < battlers.length; i++) 
+  {
+    const e = battlers[i];
     if(gameOver == true)
     { 
       hideOptionsP1();
@@ -665,9 +648,13 @@ function battleProcessing2()
     }
     else if(P2[0] <= 0 && P1[0] > 0)
     {
-        //call winner
+        // call winner
         winnerChosen = true;
     }
+    else{
+      i = 0;
+    }
+    setTimeout(() => log('Phase Change'), 1000);
     if (p1T == true)
     {
       clearLog();
@@ -677,10 +664,12 @@ function battleProcessing2()
       displayP1Stats();
       actionBase(P1, P2);
       clearAtb(P1);
-        p1T = false;
+        p2T = false; 
+        break;
     }
     else if (p2T == true)
     {
+      setTimeout(() => log('Phase Change'), 1000);
       clearLog();
       log('Player2 turn...');
       log('Attack / Psi / Defend');
@@ -688,171 +677,35 @@ function battleProcessing2()
       displayP2Stats();
       actionBase2(P2, P1);
       clearAtb(P2);
-        p2T = false;
-    }
-    hpCheck();
-  }
-  setTimeout(() => {
-      // use a switch statement
-  switch(coinTossed)
-  {
-    case true:
-    {
-        hpCheck();
-        clearLog();
-        if (p1T == true)
-          {
-            clearLog();
-            log('Player1 turn...');
-            log('Attack / Psi / Defend');
-            showOptionsP1();
-            clearAtb(P1);
-            ActionBase();
-            
-              p1T = false;
-          }
-          else if (p2T == true)
-          {
-            clearLog();
-            log('Player2 turn...');
-            log('Attack / Psi / Defend');
-            showOptionsP2();
-            clearAtb(P2);
-            actionBase2(P2, P1);
-            
-              p2T = false;
-          }
-          if (P1[0] > 0 && P2[0] > 0) 
-          {
-            battlers.push(P1);
-            battlers.push(P2);
-          }
+        p1T = false;
+        break;
     }
   }
-    return;
-  }, 1000);
-  atbChargers();
 }
- function battleProcessing()
-    {
-        hide_dials();
-        hideOptionsP1();
-        hideOptionsP2();
-    // player coin toss
-        if (coinTossed == false) 
-        {
-            coinToss();
-            battleProcessing();
-
-            if (p1T == true && p2T == true) 
-            {
-                log('retoss!');
-                coinTossed = false;
-                p1T = null;
-                p2T = null;
-                battleProcessing();
-            }
-            else if (p1T == false && p2T == false)
-            {
-                log('retoss!');
-                coinTossed = false;
-                p1T = null;
-                p2T = null;
-                battleProcessing();
-            }
-        }
-
-          if(gameOver == true)
-          { 
-            hideOptionsP1();
-            hideOptionsP2();
-          }
-          else if(P1[0] <= 0 && P2[0] > 0)
-          {
-              // call winner 
-              winnerChosen = true;
-          }
-          else if(P2[0] <= 0 && P1[0] > 0)
-          {
-              //call winner
-              winnerChosen = true;
-          }
-          if (p1T == true)
-          {
-            clearLog();
-            log('Player1 turn...');
-            log('Attack / Psi / Defend');
-            showOptionsP1();
-            //displayP1Stats();
-            actionBase(P1, P2);
-            clearAtb(P1);
-              p1T = false;
-          }
-          else if (p2T == true)
-          {
-            clearLog();
-            log('Player2 turn...');
-            log('Attack / Psi / Defend');
-            showOptionsP2();
-            //displayP2Stats();
-            actionBase2(P2, P1);
-            clearAtb(P2);
-              p2T = false;
-          }
-    }
-function bpc()
+function xfg()
 {
-        hideOptionsP1();
-        hideOptionsP2();
-    // player coin toss
-        if (coinTossed == false) 
-        {
-          coinToss();
-          xfg();
-        }
-        if(P1[0] <= 0 && P2[0] > 0)
-        {
-            // call winner 
-        }
-        else if(P2[0] <= 0 && P1[0] > 0)
-        {
-            //call winner
-        }
-        if (p1T == true && p2T == false)
-        {
-            playerPhase();
-            // timerThf(3000, 1);
-            // playerPhase();
-            //p1T = false; there's no reason to change this hierarchy
-        }
-        else if (p2T == true && p1T == false)
-        {
-            playerPhase();
-            // timerThf(3000, 1);
-            // playerPhase();
-            //p2T = false; leave this here like this.
-        // leave this alone.
-        }
-        timerThf(300, 1); // thirty frames
-    }
+  if (p1T == true && p2T == true) 
+  {
+    log('retoss!');
+    coinTossed = false;
+    p1T = null;
+    p2T = null;
+  }
+  else if(p1T == false && p2T == false)
+  {
+    log('retoss!');
+    coinTossed = false;
+    p1T = null;
+    p2T = null;
+  }
+}
+
+function battleProcessing4(PT, T)
+{
+  if(PT[9] < PT[10])
+  {
+    
+  }
 
 }
-function xfg(){
-if (p1T == true && p2T == true) 
-            {
-                log('retoss!');
-                coinTossed = false;
-                p1T = null;
-                p2T = null;
-                battleProcessing();
-            }
-  else if (p1T == false && p2T == false)
-            {
-                log('retoss!');
-                coinTossed = false;
-                p1T = null;
-                p2T = null;
-                battleProcessing();
-            }
-}
-battleProcessing2();
+    battleProcessing();
